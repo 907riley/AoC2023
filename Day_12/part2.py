@@ -69,11 +69,11 @@ class HotSpringRecords:
         # print(self.computePossibleLine(records, collections.deque([x for x in counts])))
 
     def computePossibleLine(self, records, records_index, counts, counts_index, dp):
-        print(f"In recurse {records} {counts}")
-        print(dp)
+        # print(dp)
         # if there is nothing left in counts
         # then we have covered all the groups so stop looking
         cur_records = records[records_index:]
+        # print(f"In recurse {cur_records} {counts} at {counts_index}")
         if counts_index >= len(counts) and '#' in cur_records:
             return 0
         elif counts_index >= len(counts):
@@ -84,23 +84,27 @@ class HotSpringRecords:
         # iterate over substrings
         for i in range(len(cur_records)-cur_count+1):
             sub_check = cur_records[i:i+cur_count]
-            print(f"Checking substr {sub_check} for {records}")
+            # print(f"Checking substr {sub_check} for {cur_records}")
             # check that all are ? or # and that we aren't braking a string of #
             # also if are any '#' then stop and we can only have this one
             if sub_check[0] == '#' and ('.'  in sub_check or (i+cur_count < len(cur_records) and cur_records[i+cur_count] == '#')):
                 # start_total += self.computePossibleLine(records[i+cur_count+1:], collections.deque([x for x in counts]))
-                print(f"Break {cur_count} child poss {start_total}")
+                # print(f"Break {cur_count} child poss {start_total}")
                 break
             elif sub_check[0] == '#' and ('.'  in sub_check or (i+cur_count >= len(cur_records) or cur_records[i+cur_count] != '#')):
-                if dp[counts_index][records_index] == -1:
-                    dp[counts_index][records_index] = self.computePossibleLine(records, records_index+i+cur_count+1, counts, counts_index+1, dp)
-                start_total += dp[counts_index][records_index]
+                if dp[counts_index][records_index+i] == -1:
+                    dp[counts_index][records_index+i] = self.computePossibleLine(records, records_index+i+cur_count+1, counts, counts_index+1, dp)
+                    # print(f"Setting dp at {counts_index} {records_index+i} to {dp[counts_index][records_index+i]}")
+                start_total += dp[counts_index][records_index+i]
+                # print(f"Setting start total at {counts_index} {records_index+i} to {start_total + dp[counts_index][records_index+i]}")
                 break
             elif '.' not in sub_check and (i+cur_count >= len(cur_records) or cur_records[i+cur_count] != '#'):
-                if dp[counts_index][records_index] == -1:
-                    dp[counts_index][records_index] = self.computePossibleLine(records, records_index+i+cur_count+1, counts, counts_index+1, dp)
-                start_total += dp[counts_index][records_index]
-        print(dp)
+                if dp[counts_index][records_index+i] == -1:
+                    dp[counts_index][records_index+i] = self.computePossibleLine(records, records_index+i+cur_count+1, counts, counts_index+1, dp)
+                    # print(f"Setting dp 2 at {counts_index} {records_index+i} to {dp[counts_index][records_index+i]}")
+                start_total += dp[counts_index][records_index+i]
+                # print(f"Setting start total 2 at {counts_index} {records_index+i} to {start_total + dp[counts_index][records_index+i]}")
+        # print(dp)
         return start_total
 
     # def computePossibleLine(self, records, counts) -> int:
@@ -143,9 +147,9 @@ class HotSpringRecords:
 
 
 def main():
-    broke_records = HotSpringRecords("Day 12/test_input.txt")
+    broke_records = HotSpringRecords("Day 12/small_input.txt")
     broke_records.parseFile()
-    # broke_records.uncoilRecords()
+    broke_records.uncoilRecords()
     broke_records.computeAllPossibleLines()
     print(broke_records.res)
 
