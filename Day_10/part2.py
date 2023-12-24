@@ -114,7 +114,7 @@ class PipeTraversal:
                 crosses = 0
                 x2,y2 = x,y
 
-                while x2 < len(self.matrix[0]) and y2 < len(self.matrix):git 
+                while x2 < len(self.matrix[0]) and y2 < len(self.matrix):
                     c2 = self.matrix[y2][x2]
                     if (y2, x2) in self.all_visited_pipes and c2 != "L" and c2 != "7":
                         crosses += 1
